@@ -1,16 +1,5 @@
-# hive_project
+# Hive Project
 
-A new Flutter project.
+A Basic CRUD with Hive and Atomic design
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+<img src="https://user-images.githubusercontent.com/59625027/169409647-cf126e26-4bc6-45a3-a87d-65e142765d43.jpg" width="300"/>
