@@ -12,21 +12,17 @@ class CHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
+      collapsedHeight: 80,
       expandedHeight: 300,
       centerTitle: true,
       backgroundColor: Style.PRIMARY,
       flexibleSpace: Center(
+        // Header title
         child: Text(
           title,
-          style: const TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.w300,
-            fontSize: Style.TEXT_LG,
-          ),
+          style: Style.TEXT_LG_300_WHITE,
         ),
       ),
-      // pinned: true,
-      // collapsedHeight: 80,
     );
   }
 }

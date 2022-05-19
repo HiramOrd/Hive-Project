@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:hive_project/atoms/header.dart';
-import 'package:hive_project/atoms/padding_md.dart';
-import 'package:hive_project/atoms/textfield.dart';
 import 'package:hive_project/constants/style.dart';
 import 'package:hive_project/main.dart';
 import 'package:hive_project/models/person.dart';
+import 'package:hive_project/molecules/main_container.dart';
+import 'package:hive_project/molecules/user_form.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -14,148 +13,109 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  // Controllers
   late TextEditingController name;
   late TextEditingController age;
-  List<Person> items = [];
+
+  // List of Box
+  List<Person> persons = [];
 
   @override
   void initState() {
+    super.initState();
+
+    // Init controllers
     name = TextEditingController();
     age = TextEditingController();
-    items = box.values.map((value) {
+
+    // Set persons list
+    updatePersonsList();
+  }
+
+  // Update persons list
+  void updatePersonsList() {
+    // Update person List with box data
+    persons = box.values.map((value) {
       final person = value as Person;
       return person;
     }).toList();
 
-    super.initState();
+    // Update State
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: CustomScrollView(
-          slivers: [
-            const CHeader(title: 'Hive Form'),
-            SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (_, i) {
-                  return PaddingMd(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        const Text(
-                          'Add person',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Style.PRIMARY,
-                          ),
-                        ),
-                        const SizedBox(height: Style.GAP_MD),
-                        CTextField(
-                          controller: name,
-                          hintText: 'Full Name*',
-                        ),
-                        const SizedBox(height: Style.GAP_SM),
-                        CTextField(
-                          controller: age,
-                          hintText: 'Age*',
-                          keyboardType: TextInputType.number,
-                        ),
-                        const SizedBox(height: Style.GAP_SM),
-                        Align(
-                          alignment: Alignment.topRight,
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              ElevatedButton.icon(
-                                onPressed: () async {
-                                  await box.clear();
-
-                                  items = box.values.map((value) {
-                                    final person = value as Person;
-                                    return person;
-                                  }).toList();
-
-                                  setState(() {});
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  primary: Style.PRIMARY,
-                                ),
-                                icon: const Icon(Icons.delete),
-                                label: const Text('Delete all'),
-                              ),
-                              const SizedBox(width: Style.GAP_SM),
-                              ElevatedButton.icon(
-                                onPressed: () async {
-                                  var person = Person(
-                                    name: name.text,
-                                    age: int.parse(age.text),
-                                  );
-
-                                  await box.add(person);
-
-                                  items = box.values.map((value) {
-                                    final person = value as Person;
-                                    return person;
-                                  }).toList();
-
-                                  FocusScope.of(context).requestFocus(
-                                    FocusNode(),
-                                  );
-
-                                  name.text = '';
-                                  age.text = '';
-
-                                  setState(() {});
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  primary: Style.PRIMARY,
-                                ),
-                                icon: const Icon(Icons.save),
-                                label: const Text('Save'),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Column(
-                          children: [
-                            if (items.isNotEmpty)
-                              ...items.map((value) {
-                                return ListTile(
-                                  title: Text(value.name!),
-                                  trailing: Text('${value.age}'),
-                                  onTap: () {
-                                    box.delete(value.key);
-
-                                    items = box.values.map((value) {
-                                      final person = value as Person;
-                                      return person;
-                                    }).toList();
-
-                                    setState(() {});
-                                  },
-                                );
-                              }).toList(),
-                            if (items.isEmpty)
-                              SizedBox(
-                                height: 100,
-                                child: Center(
-                                  child: const Text('vacio'),
-                                ),
-                              ),
-                          ],
-                        )
-                      ],
-                    ),
-                  );
+    return MainContainer(
+      title: 'Hive Form',
+      children: [
+        const SizedBox(height: Style.GAP_SM),
+        Align(
+          alignment: Alignment.topRight,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Form
+              UserForm(
+                name: name,
+                age: age,
+                delete: () async {
+                  // Clear persons box
+                  await box.clear();
+                  updatePersonsList();
                 },
-                childCount: 1,
+                // Save form
+                save: () async {
+                  // Set person object
+                  var person = Person(
+                    name: name.text,
+                    age: int.parse(age.text),
+                  );
+
+                  // Add Person
+                  await box.add(person);
+
+                  // Hide keboard
+                  FocusScope.of(context).requestFocus(
+                    FocusNode(),
+                  );
+
+                  // Reset inputs
+                  name.text = '';
+                  age.text = '';
+
+                  updatePersonsList();
+                },
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
+        Column(
+          children: [
+            // Persons list
+            if (persons.isNotEmpty)
+              ...persons.map((value) {
+                return ListTile(
+                  title: Text(value.name!),
+                  trailing: Text('${value.age}'),
+                  onTap: () {
+                    box.delete(value.key);
+                    updatePersonsList();
+                  },
+                );
+              }).toList(),
+
+            // If person list is empty
+            if (persons.isEmpty)
+              const SizedBox(
+                height: 100,
+                child: Center(
+                  child: Text('vacio'),
+                ),
+              ),
+          ],
+        )
+      ],
     );
   }
 }
