@@ -18,6 +18,7 @@ class UserForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // Form Title
         const Text(
@@ -40,21 +41,27 @@ class UserForm extends StatelessWidget {
           keyboardType: TextInputType.number,
         ),
 
-        // Delete button
-        ElevatedButton.icon(
-          onPressed: delete,
-          style: Style.ELEVATED_BUTTON_PRIMARY,
-          icon: const Icon(Icons.delete),
-          label: const Text('Delete all'),
-        ),
-        const SizedBox(width: Style.GAP_SM),
+        // Form buttons
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            // Delete button
+            ElevatedButton.icon(
+              onPressed: delete,
+              style: Style.ELEVATED_BUTTON_PRIMARY,
+              icon: const Icon(Icons.delete),
+              label: const Text('Delete all'),
+            ),
+            const SizedBox(width: Style.GAP_SM),
 
-        // Save button
-        ElevatedButton.icon(
-          onPressed: save,
-          style: Style.ELEVATED_BUTTON_PRIMARY,
-          icon: const Icon(Icons.save),
-          label: const Text('Save'),
+            // Save button
+            ElevatedButton.icon(
+              onPressed: save,
+              style: Style.ELEVATED_BUTTON_PRIMARY,
+              icon: const Icon(Icons.save),
+              label: const Text('Save'),
+            ),
+          ],
         ),
       ],
     );

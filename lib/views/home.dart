@@ -39,6 +39,9 @@ class _HomeState extends State<Home> {
       return person;
     }).toList();
 
+    // Set the last on top
+    persons = persons.reversed.toList();
+
     // Update State
     setState(() {});
   }
@@ -49,46 +52,41 @@ class _HomeState extends State<Home> {
       title: 'Hive Form',
       children: [
         const SizedBox(height: Style.GAP_SM),
-        Align(
-          alignment: Alignment.topRight,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // Form
-              UserForm(
-                name: name,
-                age: age,
-                delete: () async {
-                  // Clear persons box
-                  await box.clear();
-                  updatePersonsList();
-                },
-                // Save form
-                save: () async {
-                  // Set person object
-                  var person = Person(
-                    name: name.text,
-                    age: int.parse(age.text),
-                  );
 
-                  // Add Person
-                  await box.add(person);
+        // Form
+        UserForm(
+          name: name,
+          age: age,
+          delete: () async {
+            // Clear persons box
+            await box.clear();
+            updatePersonsList();
+          },
+          // Save form
+          save: () async {
+            // Set person object
+            var person = Person(
+              name: name.text,
+              age: int.parse(age.text),
+            );
 
-                  // Hide keboard
-                  FocusScope.of(context).requestFocus(
-                    FocusNode(),
-                  );
+            // Add Person
+            await box.add(person);
 
-                  // Reset inputs
-                  name.text = '';
-                  age.text = '';
+            // Hide keboard
+            FocusScope.of(context).requestFocus(
+              FocusNode(),
+            );
 
-                  updatePersonsList();
-                },
-              ),
-            ],
-          ),
+            // Reset inputs
+            name.text = '';
+            age.text = '';
+
+            updatePersonsList();
+          },
         ),
+
+        // Persons list
         Column(
           children: [
             // Persons list
