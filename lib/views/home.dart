@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hive_project/constants/style.dart';
 import 'package:hive_project/main.dart';
 import 'package:hive_project/models/person.dart';
-import 'package:hive_project/molecules/main_container.dart';
-import 'package:hive_project/molecules/user_form.dart';
+import 'package:hive_project/molecules/index.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
